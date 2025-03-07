@@ -1,0 +1,78 @@
+[
+  {
+    "id": 1,
+    "title": "UI / UX Designer",
+    "subtitle": "The User Experience Designer position exists to create compelling and digital user experience through excellent design...",
+    "logo": "material-symbols:design-services",
+    "bgColor": "#2e2882",
+    "details": {
+      "time": "Full Time",
+      "level": "Senior Level",
+      "experience": "Min. 1 Year",
+      "salary": "$2150.0 / Month",
+      "overview": "We believe that design (and you) will be critical to the company's success...",
+      "description": [
+        "3+ years working as a product designer.",
+        "A portfolio that highlights your approach to problem solving, as well as your skills in UI.",
+        "Experience conducting research and building out smooth flows.",
+        "Excellent communication skills with a well-defined design process.",
+        "Familiarity with design tools like Sketch and Figma",
+        "Up-level our overall design and bring consistency to end-user facing properties"
+      ]
+    }
+  },
+  {
+    "title": "Web Developer",
+    "subtitle": "Building dynamic, user-friendly web experiences with clean code, seamless functionality, and a focus on performance, accessibility, and responsiveness.",
+    "logo": "fa6-solid:code",
+    "bgColor": "#2e2882",
+    "details": {
+      "time": "Full time",
+      "level": "Junior Level",
+      "experience": "1+ Year",
+      "salary": "$1900.0 / Month",
+      "overview": "Join our team to shape innovative products with a focus on user-centered design.",
+      "description": [
+        "2+ years in product design.",
+        "Strong portfolio showcasing UI/UX skills.",
+        "Experience with prototyping tools.",
+        "Collaborative team player."
+      ]
+    },
+    "id": 2
+  },
+  {
+    "title": "s",
+    "subtitle": "s",
+    "logo": "fa6-solid:cloud",
+    "bgColor": "#1405eb",
+    "details": {
+      "time": "Full Time",
+      "level": "b",
+      "experience": "s",
+      "salary": "s",
+      "overview": "s",
+      "description": [
+        "s"
+      ]
+    },
+    "id": 3
+  },
+  {
+    "title": "a",
+    "subtitle": "a",
+    "logo": "",
+    "bgColor": "#00ff00",
+    "details": {
+      "time": "a",
+      "level": "a",
+      "experience": "a",
+      "salary": "a",
+      "overview": "a",
+      "description": [
+        "a"
+      ]
+    },
+    "id": 4
+  }
+]
