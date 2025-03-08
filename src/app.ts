@@ -14,8 +14,8 @@ app.use(
   cors({
     origin: function (origin, callback) {
       const allowedOrigins = [
-        "http://localhost:3000",
-        "http://192.168.0.197:3000",
+        "https://sml-nexgen.vercel.app",  // Vercel frontend
+        "https://www.fechzo.online"  // Custom domain frontend
       ];
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
