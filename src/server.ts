@@ -8,6 +8,7 @@ dotenv.config();
 console.log("EMAIL_USER:", process.env.EMAIL_USER);
 console.log("EMAIL_PASS:", process.env.EMAIL_PASS ? "********" : "Not Set");
 
+
 import app from './app';
 
 const PORT: number = parseInt(process.env.PORT ?? '5000', 10);

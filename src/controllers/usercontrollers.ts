@@ -296,3 +296,13 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
   console.log(`Password reset successfully for ${email}`);
   res.status(200).json({ message: "Password reset successfully" });
 };
+
+export const getAllUsers = (req: Request, res: Response): void => {
+  try {
+    const { users } = readUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Failed to retrieve users" });
+  }
+};

@@ -1,8 +1,7 @@
 # Node.js dependencies
 node_modules/
 
-# Compiled JavaScript files (from TypeScript)
-dist/
+
 
 # Environment variables (contains sensitive data)
 .env

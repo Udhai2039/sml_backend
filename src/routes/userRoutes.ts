@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { registerUser, loginUser,getUserProfile,forgotPassword,resetPassword } from "../controllers/usercontrollers";
+import { registerUser, loginUser,getUserProfile,forgotPassword,resetPassword, getAllUsers } from "../controllers/usercontrollers";
 
 const router = express.Router();
 
@@ -21,6 +21,8 @@ router.post("/login", loginUser);
 router.get("/user-profile", getUserProfile); 
 router.post('/forgot-password', forgotPassword);
 router.post("/reset-password", resetPassword);
+router.get("/", getAllUsers);
+
 
 export default router;
 

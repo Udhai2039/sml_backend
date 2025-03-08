@@ -42,27 +42,5 @@
     "coverLetter": "1 yr",
     "id": 4,
     "createdAt": "2025-03-06T07:22:47.633Z"
-  },
-  {
-    "jobId": null,
-    "applicantName": "siva",
-    "email": "s@gmail.com",
-    "phone": "9361428388",
-    "position": "e",
-    "resume": "uploads\\resume-1741424161356-204429481.pdf",
-    "coverLetter": "dsgfbgdnbg",
-    "id": 5,
-    "createdAt": "2025-03-08T08:56:01.397Z"
-  },
-  {
-    "jobId": null,
-    "applicantName": "YADHUNANDAN S",
-    "email": "yadhunandhans@drngpit.ac.in",
-    "phone": "1234567890",
-    "position": "junior devloper",
-    "resume": "uploads\\resume-1741424540152-459256924.pdf",
-    "coverLetter": "adcaf",
-    "id": 6,
-    "createdAt": "2025-03-08T09:02:20.330Z"
   }
 ]
