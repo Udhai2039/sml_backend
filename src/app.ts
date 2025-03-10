@@ -1,3 +1,4 @@
+//app.ts
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser"; // Import cookie-parser
@@ -6,8 +7,14 @@ import bookingRoutes from "./routes/BookingRoutes";
 import jobRoutes from "./routes/jobRoutes";
 import applicationRoutes from "./routes/applicationRoutes";
 import userRoutes from "./routes/userRoutes"; // Import user routes
+//import { getUserProfile } from "./controllers/usercontrollers";
 
 const app = express();
+
+// Add this to app.ts before you use the routers
+app.get('/api/test', (req, res) => {
+  res.status(200).json({ message: 'API is working' });
+});
 
 // Configure CORS
 app.use(

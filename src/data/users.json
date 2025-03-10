@@ -1,1 +1,35 @@
-[]
+{
+  "users": [
+    {
+      "id": "SML-USR1",
+      "fullName": "Dhanush",
+      "email": "3dhanushkccd@gmail.com",
+      "phone": "9361428388",
+      "address": "Hosur",
+      "password": "$2b$10$dKkmknkXhd8vfsHnUspYVeNXuW6ea/cuKjN.K6s5JDxTzmZHoV/ku",
+      "gender": "Male",
+      "profilePic": "/uploads/1741584593890-PHOTO.jpg"
+    },
+    {
+      "id": "SML-USR3",
+      "fullName": "Yadhunandan",
+      "email": "yadhunandhans@drngpit.ac.in",
+      "phone": "8778918288",
+      "address": "Bangalore",
+      "password": "$2b$10$FE6lLkRXq4Q9I5wcys92duH9mfd./p1faYMljZncWG6jo/IZp6Oam",
+      "gender": "male",
+      "profilePic": "/uploads/1741580845610-dp.jpg"
+    },
+    {
+      "id": "SML-USR4",
+      "fullName": "Palani",
+      "email": "palani@gmail.com",
+      "phone": "9585845546",
+      "address": "rayakottai",
+      "password": "$2b$10$UvgZRXkkz6C3pAT7fgBCHO7NYGxpki7Bz5IJaJ4EJpyR81GHlgLpm",
+      "gender": "Male",
+      "profilePic": "/uploads/1741585491832-dp2.png"
+    }
+  ],
+  "lastUserNumber": 4
+}

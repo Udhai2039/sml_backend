@@ -1,3 +1,4 @@
+// usercontrollers.ts
 import fs from "fs";
 import path from "path";
 import { Request, Response } from "express";
@@ -170,32 +171,29 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   res.status(200).json({ message: "Login successful", user });
 };
 
-export const getUserProfile = (req: Request, res: Response): void => {
-  try {
-    const session = req.cookies.session;
+// export const getUserProfile = (req: Request, res: Response): void => {
+//   try {
+//     const session = req.cookies.session;
+//     if (!session) {
+//       res.status(401).json({ message: "Not logged in" });
+//       return;
+//     }
 
-    if (!session) {
-      console.log("No session cookie found");
-      res.status(401).json({ message: "Not logged in" });
-      return;
-    }
+//     const parsedSession = JSON.parse(session);
+//     const { users } = readUsers();
+//     const user = users.find((u) => u.email === parsedSession.email);
 
-    let parsedSession;
-    try {
-      parsedSession = JSON.parse(session);
-      console.log("Session parsed:", parsedSession);
-    } catch (error) {
-      console.error("Error parsing session:", error);
-      res.status(400).json({ message: "Invalid session format" });
-      return;
-    }
+//     if (!user) {
+//       res.status(404).json({ message: "User not found" });
+//       return;
+//     }
 
-    res.status(200).json(parsedSession);
-  } catch (error) {
-    console.error("Error fetching user profile:", error);
-    res.status(500).json({ message: "Error fetching user session" });
-  }
-};
+//     res.status(200).json({ user: { fullName: user.fullName, email: user.email, profilePic: user.profilePic } });
+//   } catch (error) {
+//     console.error("Error fetching user profile:", error);
+//     res.status(500).json({ message: "Error fetching user session" });
+//   }
+// };
 
 export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
   console.log("Forgot password request:", req.body);
@@ -304,5 +302,111 @@ export const getAllUsers = (req: Request, res: Response): void => {
   } catch (error) {
     console.error("Error fetching users:", error);
     res.status(500).json({ message: "Failed to retrieve users" });
+  }
+};
+
+// Add these two functions to your existing usercontrollers.ts file
+
+export const updateUser = async (req: Request, res: Response): Promise<void> => {
+  console.log("Update user request:", req.params.id, req.body);
+  
+  const userId = req.params.id;
+  const { fullName, email, phone, address, gender } = req.body;
+  
+  if (!userId || !fullName || !email || !phone || !address || !gender) {
+    console.log("Missing required fields for update");
+    res.status(400).json({ message: "All fields are required" });
+    return;
+  }
+  
+  try {
+    const { users, lastUserNumber } = readUsers();
+    const userIndex = users.findIndex(user => user.id === userId);
+    
+    if (userIndex === -1) {
+      console.log(`User not found: ${userId}`);
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    
+    // Check if email is being changed and if it's already in use
+    if (email !== users[userIndex].email) {
+      const emailExists = users.some(
+        (user, index) => index !== userIndex && user.email === email
+      );
+      
+      if (emailExists) {
+        console.log(`Email already registered: ${email}`);
+        res.status(400).json({ message: "Email already registered" });
+        return;
+      }
+    }
+    
+    // Update user fields
+    users[userIndex] = {
+      ...users[userIndex],
+      fullName,
+      email,
+      phone,
+      address,
+      gender,
+      // Handle profile picture if provided
+      profilePic: req.file 
+        ? `/uploads/${req.file.filename}` 
+        : users[userIndex].profilePic
+    };
+    
+    writeUsers(users, lastUserNumber);
+    
+    console.log(`User updated: ${userId}`);
+    res.status(200).json({ message: "User updated successfully", user: users[userIndex] });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({ message: "Failed to update user" });
+  }
+};
+
+export const deleteUser = (req: Request, res: Response): void => {
+  console.log("Delete user request:", req.params.id);
+  
+  const userId = req.params.id;
+  
+  if (!userId) {
+    console.log("Missing user ID for delete");
+    res.status(400).json({ message: "User ID is required" });
+    return;
+  }
+  
+  try {
+    const { users, lastUserNumber } = readUsers();
+    const userIndex = users.findIndex(user => user.id === userId);
+    
+    if (userIndex === -1) {
+      console.log(`User not found: ${userId}`);
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+    
+    // Store user info for cleanup
+    const userToDelete = users[userIndex];
+    
+    // Remove user from array
+    users.splice(userIndex, 1);
+    writeUsers(users, lastUserNumber);
+    
+    // Optional: Delete profile picture file if it exists
+    if (userToDelete.profilePic && userToDelete.profilePic.startsWith('/uploads/')) {
+      const filePath = path.join(__dirname, '..', userToDelete.profilePic);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log(`Deleted profile picture: ${filePath}`);
+      }
+    }
+    
+    console.log(`User deleted: ${userId}`);
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Failed to delete user" });
   }
 };
