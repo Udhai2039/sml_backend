@@ -171,30 +171,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   res.status(200).json({ message: "Login successful", user });
 };
 
-// export const getUserProfile = (req: Request, res: Response): void => {
-//   try {
-//     const session = req.cookies.session;
-//     if (!session) {
-//       res.status(401).json({ message: "Not logged in" });
-//       return;
-//     }
-
-//     const parsedSession = JSON.parse(session);
-//     const { users } = readUsers();
-//     const user = users.find((u) => u.email === parsedSession.email);
-
-//     if (!user) {
-//       res.status(404).json({ message: "User not found" });
-//       return;
-//     }
-
-//     res.status(200).json({ user: { fullName: user.fullName, email: user.email, profilePic: user.profilePic } });
-//   } catch (error) {
-//     console.error("Error fetching user profile:", error);
-//     res.status(500).json({ message: "Error fetching user session" });
-//   }
-// };
-
 export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
   console.log("Forgot password request:", req.body);
 
