@@ -19,27 +19,28 @@ app.get('/api/test', (req, res) => {
 // Configure CORS
 app.use(
     cors({
-        origin: function (origin, callback) {
+        origin: (origin, callback) => {
             const allowedOrigins = [
-                "http://localhost:3000", // Local development
-                "https://sml-nexgen-git-master-udhais-projects.vercel.app", // Frontend on Vercel
-                "https://sml-nexgen-n63mrtung-udhais-projects.vercel.app", // Another Vercel frontend
-                 "https://www.smlnexgenllp.com/",// Additional domain
+                "http://localhost:3000",
+                "https://sml-nexgen-git-master-udhais-projects.vercel.app",
+                "https://sml-nexgen-n63mrtung-udhais-projects.vercel.app",
+                "https://www.smlnexgenllp.com",
                 "www.smlnexgenllp.com",
             ];
-            console.log('Request Origin:', origin); // Debug log
+            
             if (!origin || allowedOrigins.includes(origin)) {
                 callback(null, true);
             } else {
-                console.error('Rejected Origin:', origin);
-                callback(new Error("Not allowed by CORS"));
+                console.error(`CORS blocked: ${origin}`);
+                callback(null, false);  // Instead of throwing an error, return `false`
             }
         },
-        credentials: true, // Allow cookies and authentication headers
+        credentials: true,
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
         allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     })
 );
+
 
 // Middleware
 app.use(express.json());
