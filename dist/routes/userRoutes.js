@@ -1,4 +1,5 @@
 "use strict";
+// userRoutes.ts
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -19,7 +20,12 @@ const storage = multer_1.default.diskStorage({
 const upload = (0, multer_1.default)({ storage });
 router.post("/register", upload.single("profilePic"), usercontrollers_1.registerUser);
 router.post("/login", usercontrollers_1.loginUser);
-router.get("/user-profile", usercontrollers_1.getUserProfile);
 router.post('/forgot-password', usercontrollers_1.forgotPassword);
 router.post("/reset-password", usercontrollers_1.resetPassword);
+router.get("/", usercontrollers_1.getAllUsers);
+// Updated route to fetch full user details for profile view
+router.get("/getUserDetails", usercontrollers_1.getUserDetails);
+// Update user details (including profile picture) using a PUT request
+router.put("/:id", upload.single("profilePic"), usercontrollers_1.updateUser);
+router.delete("/:id", usercontrollers_1.deleteUser);
 exports.default = router;

@@ -56,23 +56,6 @@
         "Hello user come and apply to the job."
       ]
     },
-    "id": 5
-  },
-  {
-    "title": "a",
-    "subtitle": "a",
-    "logo": "fa6-solid:virus",
-    "bgColor": "#0162FF",
-    "details": {
-      "time": "a",
-      "level": "a",
-      "experience": "a",
-      "salary": "a",
-      "overview": "a",
-      "description": [
-        "a"
-      ]
-    },
-    "id": 6
+    "id": 3
   }
 ]

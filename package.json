@@ -21,7 +21,8 @@
     "graphql-http": "^1.22.4",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.10.0",
-    "pg": "^8.13.3"
+    "pg": "^8.13.3",
+    "react-easy-crop": "^5.4.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -31,6 +32,7 @@
     "@types/multer": "^1.4.12",
     "@types/node": "^22.13.5",
     "@types/nodemailer": "^6.4.17",
+    "@types/react-easy-crop": "^1.16.0",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"

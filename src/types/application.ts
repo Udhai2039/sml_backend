@@ -1,6 +1,6 @@
 export interface Application {
   id: number;
-  jobId: number;
+  jobId: number | null; // Allow null for jobId
   applicantName: string;
   email: string;
   phone: string;
@@ -8,4 +8,5 @@ export interface Application {
   resume: string;
   coverLetter: string;
   createdAt: Date;
+  status: string;
 }

@@ -116,7 +116,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
       Please keep this information safe. You can log in using your email and password.
 
       Best regards,
-      Your App Team
+      Your SML Nexgen Team
     `,
   };
 
@@ -137,39 +137,93 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
   console.log("Login attempt:", req.body);
 
-  const { email, password } = req.body;
+  const { email, id, password } = req.body;
 
-  if (!email || !password) {
-    console.log("Missing email or password");
-    res.status(400).json({ message: "Email and password are required" });
+  if ((!email && !id) || !password) {
+    console.log("Missing credentials");
+    res.status(400).json({ message: "User ID or Email and password are required" });
     return;
   }
 
   const { users } = readUsers();
-  const user = users.find((u) => u.email === email);
+  const user = users.find((u) => 
+    (email && u.email === email) || (id && u.id === id)
+  );
 
   if (!user) {
-    console.log(`User not found: ${email}`);
-    res.status(401).json({ message: "Invalid email or password" });
+    console.log(`User not found: ${email || id}`);
+    res.status(401).json({ message: "Invalid User ID or Email" });
     return;
   }
 
   const isPasswordValid: boolean = bcrypt.compareSync(password, user.password);
   if (!isPasswordValid) {
-    console.log(`Invalid password for ${email}`);
-    res.status(401).json({ message: "Invalid email or password" });
+    console.log(`Invalid password for ${email || id}`);
+    res.status(401).json({ message: "Invalid password" });
     return;
   }
 
   res.cookie(
     "session",
-    JSON.stringify({ email: user.email, profilePic: user.profilePic }),
-    { httpOnly: true }
+    JSON.stringify({ id: user.id, email: user.email, phone: user.phone, profilePic: user.profilePic }),
+    { 
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
   );
 
-  console.log(`User logged in: ${email}`);
-  res.status(200).json({ message: "Login successful", user });
+  console.log(`User logged in: ${email || id}`);
+  res.status(200).json({ 
+    message: "Login successful", 
+    user: { 
+      id: user.id, 
+      email: user.email, 
+      fullName: user.fullName, 
+      phone: user.phone,
+      profilePic: user.profilePic 
+    }
+  });
 };
+
+
+
+
+export const getUserDetails = (req: Request, res: Response): void => {
+  console.log("Fetching user details:", req.query);
+
+  const { email, id } = req.query;
+
+  if (!email && !id) {
+    console.log("Email or User ID required");
+    res.status(400).json({ message: "Email or User ID is required" });
+    return;
+  }
+
+  const { users } = readUsers();
+  const user = users.find((u) =>
+    (email && u.email === String(email)) || (id && u.id === String(id))
+  );
+
+  if (!user) {
+    console.log(`User not found: ${email || id}`);
+    res.status(404).json({ message: "User not found" });
+    return;
+  }
+
+  // Prepend backend base URL to profilePic if it exists.
+  const API_BASE_URL = process.env.API_BASE_URL || "http://192.168.0.197:5000";
+  const updatedUser = {
+    ...user,
+    profilePic: user.profilePic ? `${API_BASE_URL}${user.profilePic}` : user.profilePic,
+  };
+
+  res.status(200).json(updatedUser);
+};
+
+
+
 
 export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
   console.log("Forgot password request:", req.body);
@@ -212,7 +266,7 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
       If you didn’t request this, please ignore this email.
 
       Best regards,
-      Your App Team
+      SMLNexgen LLP
     `,
   };
 
@@ -318,7 +372,7 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
       }
     }
     
-    // Update user fields
+    // Update user fields including profilePic if a file is uploaded
     users[userIndex] = {
       ...users[userIndex],
       fullName,
@@ -326,7 +380,6 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
       phone,
       address,
       gender,
-      // Handle profile picture if provided
       profilePic: req.file 
         ? `/uploads/${req.file.filename}` 
         : users[userIndex].profilePic

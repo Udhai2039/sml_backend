@@ -1,8 +1,17 @@
 // userRoutes.ts
+
 import express from "express";
 import multer from "multer";
-import { registerUser, loginUser,getUserProfile,forgotPassword,resetPassword, getAllUsers, updateUser, deleteUser } from "../controllers/usercontrollers";
-
+import { 
+  registerUser, 
+  loginUser, 
+  forgotPassword,
+  resetPassword, 
+  getAllUsers, 
+  updateUser, 
+  deleteUser, 
+  getUserDetails 
+} from "../controllers/usercontrollers";
 
 const router = express.Router();
 
@@ -20,14 +29,16 @@ const upload = multer({ storage });
 
 router.post("/register", upload.single("profilePic"), registerUser);
 router.post("/login", loginUser);
-router.get("/user-profile", getUserProfile); 
 router.post('/forgot-password', forgotPassword);
 router.post("/reset-password", resetPassword);
 router.get("/", getAllUsers);
 
+// Updated route to fetch full user details for profile view
+router.get("/getUserDetails", getUserDetails);
+
+// Update user details (including profile picture) using a PUT request
 router.put("/:id", upload.single("profilePic"), updateUser);
+
 router.delete("/:id", deleteUser);
 
-
 export default router;
-

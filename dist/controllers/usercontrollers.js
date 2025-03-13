@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resetPassword = exports.forgotPassword = exports.getUserProfile = exports.loginUser = exports.registerUser = void 0;
+exports.deleteUser = exports.updateUser = exports.getAllUsers = exports.resetPassword = exports.forgotPassword = exports.getUserDetails = exports.loginUser = exports.registerUser = void 0;
+// usercontrollers.ts
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const nodemailer_1 = __importDefault(require("nodemailer"));
@@ -107,7 +108,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
       Please keep this information safe. You can log in using your email and password.
 
       Best regards,
-      Your App Team
+      Your SML Nexgen Team
     `,
     };
     console.log("Email content to be sent:", mailOptions); // Debug log
@@ -125,56 +126,65 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.registerUser = registerUser;
 const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Login attempt:", req.body);
-    const { email, password } = req.body;
-    if (!email || !password) {
-        console.log("Missing email or password");
-        res.status(400).json({ message: "Email and password are required" });
+    const { email, id, password } = req.body;
+    if ((!email && !id) || !password) {
+        console.log("Missing credentials");
+        res.status(400).json({ message: "User ID or Email and password are required" });
         return;
     }
     const { users } = readUsers();
-    const user = users.find((u) => u.email === email);
+    const user = users.find((u) => (email && u.email === email) || (id && u.id === id));
     if (!user) {
-        console.log(`User not found: ${email}`);
-        res.status(401).json({ message: "Invalid email or password" });
+        console.log(`User not found: ${email || id}`);
+        res.status(401).json({ message: "Invalid User ID or Email" });
         return;
     }
     const isPasswordValid = bcryptjs_1.default.compareSync(password, user.password);
     if (!isPasswordValid) {
-        console.log(`Invalid password for ${email}`);
-        res.status(401).json({ message: "Invalid email or password" });
+        console.log(`Invalid password for ${email || id}`);
+        res.status(401).json({ message: "Invalid password" });
         return;
     }
-    res.cookie("session", JSON.stringify({ email: user.email, profilePic: user.profilePic }), { httpOnly: true });
-    console.log(`User logged in: ${email}`);
-    res.status(200).json({ message: "Login successful", user });
+    res.cookie("session", JSON.stringify({ id: user.id, email: user.email, phone: user.phone, profilePic: user.profilePic }), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    });
+    console.log(`User logged in: ${email || id}`);
+    res.status(200).json({
+        message: "Login successful",
+        user: {
+            id: user.id,
+            email: user.email,
+            fullName: user.fullName,
+            phone: user.phone,
+            profilePic: user.profilePic
+        }
+    });
 });
 exports.loginUser = loginUser;
-const getUserProfile = (req, res) => {
-    try {
-        const session = req.cookies.session;
-        if (!session) {
-            console.log("No session cookie found");
-            res.status(401).json({ message: "Not logged in" });
-            return;
-        }
-        let parsedSession;
-        try {
-            parsedSession = JSON.parse(session);
-            console.log("Session parsed:", parsedSession);
-        }
-        catch (error) {
-            console.error("Error parsing session:", error);
-            res.status(400).json({ message: "Invalid session format" });
-            return;
-        }
-        res.status(200).json(parsedSession);
+const getUserDetails = (req, res) => {
+    console.log("Fetching user details:", req.query);
+    const { email, id } = req.query;
+    if (!email && !id) {
+        console.log("Email or User ID required");
+        res.status(400).json({ message: "Email or User ID is required" });
+        return;
     }
-    catch (error) {
-        console.error("Error fetching user profile:", error);
-        res.status(500).json({ message: "Error fetching user session" });
+    const { users } = readUsers();
+    const user = users.find((u) => (email && u.email === String(email)) || (id && u.id === String(id)));
+    if (!user) {
+        console.log(`User not found: ${email || id}`);
+        res.status(404).json({ message: "User not found" });
+        return;
     }
+    // Prepend backend base URL to profilePic if it exists.
+    const API_BASE_URL = process.env.API_BASE_URL || "http://192.168.0.197:5000";
+    const updatedUser = Object.assign(Object.assign({}, user), { profilePic: user.profilePic ? `${API_BASE_URL}${user.profilePic}` : user.profilePic });
+    res.status(200).json(updatedUser);
 };
-exports.getUserProfile = getUserProfile;
+exports.getUserDetails = getUserDetails;
 const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("Forgot password request:", req.body);
     const { email } = req.body;
@@ -209,7 +219,7 @@ const forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
       If you didn’t request this, please ignore this email.
 
       Best regards,
-      Your App Team
+      SMLNexgen LLP
     `,
     };
     console.log("Sending OTP email to:", email);
@@ -258,3 +268,97 @@ const resetPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     res.status(200).json({ message: "Password reset successfully" });
 });
 exports.resetPassword = resetPassword;
+const getAllUsers = (req, res) => {
+    try {
+        const { users } = readUsers();
+        res.status(200).json(users);
+    }
+    catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).json({ message: "Failed to retrieve users" });
+    }
+};
+exports.getAllUsers = getAllUsers;
+// Add these two functions to your existing usercontrollers.ts file
+const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("Update user request:", req.params.id, req.body);
+    const userId = req.params.id;
+    const { fullName, email, phone, address, gender } = req.body;
+    if (!userId || !fullName || !email || !phone || !address || !gender) {
+        console.log("Missing required fields for update");
+        res.status(400).json({ message: "All fields are required" });
+        return;
+    }
+    try {
+        const { users, lastUserNumber } = readUsers();
+        const userIndex = users.findIndex(user => user.id === userId);
+        if (userIndex === -1) {
+            console.log(`User not found: ${userId}`);
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+        // Check if email is being changed and if it's already in use
+        if (email !== users[userIndex].email) {
+            const emailExists = users.some((user, index) => index !== userIndex && user.email === email);
+            if (emailExists) {
+                console.log(`Email already registered: ${email}`);
+                res.status(400).json({ message: "Email already registered" });
+                return;
+            }
+        }
+        // Update user fields including profilePic if a file is uploaded
+        users[userIndex] = Object.assign(Object.assign({}, users[userIndex]), { fullName,
+            email,
+            phone,
+            address,
+            gender, profilePic: req.file
+                ? `/uploads/${req.file.filename}`
+                : users[userIndex].profilePic });
+        writeUsers(users, lastUserNumber);
+        console.log(`User updated: ${userId}`);
+        res.status(200).json({ message: "User updated successfully", user: users[userIndex] });
+    }
+    catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ message: "Failed to update user" });
+    }
+});
+exports.updateUser = updateUser;
+const deleteUser = (req, res) => {
+    console.log("Delete user request:", req.params.id);
+    const userId = req.params.id;
+    if (!userId) {
+        console.log("Missing user ID for delete");
+        res.status(400).json({ message: "User ID is required" });
+        return;
+    }
+    try {
+        const { users, lastUserNumber } = readUsers();
+        const userIndex = users.findIndex(user => user.id === userId);
+        if (userIndex === -1) {
+            console.log(`User not found: ${userId}`);
+            res.status(404).json({ message: "User not found" });
+            return;
+        }
+        // Store user info for cleanup
+        const userToDelete = users[userIndex];
+        // Remove user from array
+        users.splice(userIndex, 1);
+        writeUsers(users, lastUserNumber);
+        // Optional: Delete profile picture file if it exists
+        if (userToDelete.profilePic && userToDelete.profilePic.startsWith('/uploads/')) {
+            const filePath = path_1.default.join(__dirname, '..', userToDelete.profilePic);
+            if (fs_1.default.existsSync(filePath)) {
+                fs_1.default.unlinkSync(filePath);
+                console.log(`Deleted profile picture: ${filePath}`);
+            }
+        }
+        console.log(`User deleted: ${userId}`);
+        res.status(200).json({ message: "User deleted successfully" });
+    }
+    catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "Failed to delete user" });
+    }
+};
+exports.deleteUser = deleteUser;

@@ -40,39 +40,5 @@
       ]
     },
     "id": 2
-  },
-  {
-    "title": "s",
-    "subtitle": "s",
-    "logo": "fa6-solid:cloud",
-    "bgColor": "#1405eb",
-    "details": {
-      "time": "Full Time",
-      "level": "b",
-      "experience": "s",
-      "salary": "s",
-      "overview": "s",
-      "description": [
-        "s"
-      ]
-    },
-    "id": 3
-  },
-  {
-    "title": "a",
-    "subtitle": "a",
-    "logo": "",
-    "bgColor": "#00ff00",
-    "details": {
-      "time": "a",
-      "level": "a",
-      "experience": "a",
-      "salary": "a",
-      "overview": "a",
-      "description": [
-        "a"
-      ]
-    },
-    "id": 4
   }
 ]
