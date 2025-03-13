@@ -24,6 +24,7 @@ app.use((0, cors_1.default)({
             "https://sml-nexgen-git-master-udhais-projects.vercel.app",
             "https://sml-nexgen-n63mrtung-udhais-projects.vercel.app",
             "https://www.smlnexgenllp.com/",
+            "www.smlnexgenllp.com",
         ];
         console.log('Request Origin:', origin); // Debug log
         if (!origin || allowedOrigins.includes(origin)) {
