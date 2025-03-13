@@ -17,27 +17,37 @@ const app = (0, express_1.default)();
 app.get('/api/test', (req, res) => {
     res.status(200).json({ message: 'API is working' });
 });
-app.use((0, cors_1.default)({
+app.use(
+  cors({
     origin: function (origin, callback) {
-        const allowedOrigins = [
-            "http://localhost:3000",
-            "https://sml-nexgen-git-master-udhais-projects.vercel.app",
-            "https://sml-nexgen-n63mrtung-udhais-projects.vercel.app",
-            "https://www.smlnexgenllp.com/",
-            "www.smlnexgenllp.com",
-        ];
-        console.log('Request Origin:', origin); // Debug log
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.error('Rejected Origin:', origin);
-            callback(new Error("Not allowed by CORS"));
-        }
+      const allowedOrigins = [
+        "http://localhost:3000",
+        "https://sml-nexgen-git-master-udhais-projects.vercel.app",
+        "https://sml-nexgen-n63mrtung-udhais-projects.vercel.app",
+        "https://www.smlnexgenllp.com"
+      ];
+
+      console.log('Request Origin:', origin); // Debug log
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        console.error('Rejected Origin:', origin);
+        callback(new Error("Not allowed by CORS"));
+      }
     },
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-}));
+    allowedHeaders: [
+      "Origin",
+      "X-Requested-With",
+      "Content-Type",
+      "Accept",
+      "Authorization"
+    ],
+  })
+);
+
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use("/uploads", express_1.default.static("uploads"));
