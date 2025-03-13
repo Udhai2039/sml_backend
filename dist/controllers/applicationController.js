@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteApplication = exports.updateApplicationStatus = exports.addApplication = exports.getApplications = void 0;
+exports.withdrawApplication = exports.updateApplicationStatus = exports.addApplication = exports.getApplications = void 0;
 // controllers/applicationController.ts
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -31,14 +31,14 @@ const updateApplicationStatus = (id, status) => {
     return false;
 };
 exports.updateApplicationStatus = updateApplicationStatus;
-const deleteApplication = (id) => {
+const withdrawApplication = (id) => {
     const applications = (0, exports.getApplications)();
-    const index = applications.findIndex((app) => app.id === id);
-    if (index !== -1) {
-        applications.splice(index, 1);
+    const application = applications.find((app) => app.id === id);
+    if (application) {
+        application.status = "Withdrawn";
         fs_1.default.writeFileSync(dbPath, JSON.stringify(applications, null, 2));
         return true;
     }
     return false;
 };
-exports.deleteApplication = deleteApplication;
+exports.withdrawApplication = withdrawApplication;

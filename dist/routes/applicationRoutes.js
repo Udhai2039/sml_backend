@@ -56,9 +56,10 @@ router.get("/user/:email", (req, res) => {
     const applications = (0, applicationController_1.getApplications)().filter((app) => app.email === email);
     res.json(applications);
 });
-router.delete("/:id", (req, res) => {
+// Update the DELETE route to PUT for withdrawal
+router.put("/:id/withdraw", (req, res) => {
     const { id } = req.params;
-    const success = (0, applicationController_1.deleteApplication)(parseInt(id));
+    const success = (0, applicationController_1.withdrawApplication)(parseInt(id));
     if (success) {
         res.status(200).json({ message: "Application withdrawn" });
     }
