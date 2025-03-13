@@ -24,7 +24,7 @@ app.use(
                 "http://localhost:3000", // Local development
                 "https://sml-nexgen-git-master-udhais-projects.vercel.app", // Frontend on Vercel
                 "https://sml-nexgen-n63mrtung-udhais-projects.vercel.app", // Another Vercel frontend
-                "https://www.fechzo.online" // Additional domain
+                 "https://www.smlnexgenllp.com/",// Additional domain
             ];
             console.log('Request Origin:', origin); // Debug log
             if (!origin || allowedOrigins.includes(origin)) {
