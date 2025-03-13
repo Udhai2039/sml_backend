@@ -21,18 +21,21 @@ app.use((0, cors_1.default)({
     origin: function (origin, callback) {
         const allowedOrigins = [
             "http://localhost:3000",
-            "http://192.168.0.197:3000",
+            "https://sml-nexgen-git-master-udhais-projects.vercel.app",
+            "https://sml-nexgen-n63mrtung-udhais-projects.vercel.app",
+            "https://www.smlnexgenllp.com/",
         ];
+        console.log('Request Origin:', origin); // Debug log
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
-        }
-        else {
+        } else {
+            console.error('Rejected Origin:', origin);
             callback(new Error("Not allowed by CORS"));
         }
     },
     credentials: true,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
 }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
