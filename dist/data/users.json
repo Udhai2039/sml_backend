@@ -1,16 +1,6 @@
 {
   "users": [
     {
-      "id": "sml-usr1",
-      "fullName": "Udhai",
-      "email": "udhai2039@gmail.com",
-      "phone": "1234444432",
-      "address": "edfvd",
-      "password": "$2b$10$SiWs0zyotSTDsap9PhS0cO0OTW7RPORYPLeobE2urmDgt7n87kySi",
-      "gender": "Male",
-      "profilePic": "/uploads/1741841076295-cropped_image.jpg"
-    },
-    {
       "id": "SML-USR3",
       "fullName": "Dhanush Kumar K",
       "email": "3dhanushkccd@gmail.com",
@@ -18,7 +8,7 @@
       "address": "Hosur",
       "password": "$2b$10$MU6ihzoD5qZ.jxdo6qiUkeJ5gW0xPfB.1g48RDfmBjK53IEFun9Yu",
       "gender": "Male",
-      "profilePic": "/uploads/1741840717349-PHOTO.jpg"
+      "profilePic": "/uploads/1742190738430-cropped_image.jpg"
     }
   ],
   "lastUserNumber": 3
