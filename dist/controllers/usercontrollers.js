@@ -180,7 +180,7 @@ const getUserDetails = (req, res) => {
         return;
     }
     // Prepend backend base URL to profilePic if it exists.
-    const API_BASE_URL = process.env.API_BASE_URL || "http://192.168.0.197:5000";
+    const API_BASE_URL = process.env.API_BASE_URL || "https://sml-backend-qgp6.onrender.com";
     const updatedUser = Object.assign(Object.assign({}, user), { profilePic: user.profilePic ? `${API_BASE_URL}${user.profilePic}` : user.profilePic });
     res.status(200).json(updatedUser);
 };
