@@ -1,15 +1,1 @@
-{
-  "users": [
-    {
-      "id": "SML-USR3",
-      "fullName": "Dhanush Kumar K",
-      "email": "3dhanushkccd@gmail.com",
-      "phone": "9361428388",
-      "address": "Hosur",
-      "password": "$2b$10$MU6ihzoD5qZ.jxdo6qiUkeJ5gW0xPfB.1g48RDfmBjK53IEFun9Yu",
-      "gender": "Male",
-      "profilePic": "/uploads/1742190738430-cropped_image.jpg"
-    }
-  ],
-  "lastUserNumber": 3
-}
+[]
